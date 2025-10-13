@@ -1,0 +1,231 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{tabularx}
+
+\geometry{margin=1in}
+
+% --- Impostazioni per il codice sorgente ---
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{gray}\itshape,
+  stringstyle=\color{orange},
+  numbers=left,
+  numberstyle=\tiny,
+  breaklines=true,
+  frame=single,
+  captionpos=b,
+  tabsize=4,
+  showstringspaces=false
+}
+
+\begin{document}
+
+\title{Laboratory Assignment: RISC-V Assembly Programming}
+\author{Student: Andrei Stefan}
+\date{\today}
+\maketitle
+
+\section*{Exercise 1}
+
+Using the same flow described before, write and run a program for calculating the Fibonacci sequence and save it in \texttt{program2.s} (any file name is acceptable, as long as it has the \texttt{.s} extension).
+
+\subsection*{Assembly Program}
+
+\begin{lstlisting}[language={[x86masm]Assembler}, caption={Fibonacci sequence generator in RISC-V Assembly}]
+# Data section
+.section .data
+# Place here your program data. In this example
+# two vector of floats, a vector of ints and a single int are defined
+T0: .word 0x0BADC0DE
+
+# Code section
+.section .text
+.globl _start
+_start:
+# The _start label signals the entry point of your program
+# DO NOT CHANGE ITS NAME. It must be "_start", not "start" or "main".
+
+Main:
+    # Initialize Fibonacci variables
+    li x1, 0      # x1 = a = first Fibonacci number (0)
+    li x2, 1      # x2 = b = second Fibonacci number (1)
+    li x3, 21     # x3 = count = number of terms to generate
+    li x4, 0      # x4 = i = loop counter
+
+    # Loop to generate and print remaining 20 numbers
+    addi x4, x4, 1    # i = 1 (start from second iteration)
+
+fib_loop:
+    beq x4, x3, End   # if i == count, exit loop
+
+    # Calculate next Fibonacci number
+    add x5, x1, x2    # x5 = next = a + b
+
+    # Update variables for next iteration
+    mv x1, x2         # a = b
+    mv x2, x5         # b = next
+
+    # Increment counter and continue loop
+    addi x4, x4, 1
+    j fib_loop
+
+End:
+    # Exit syscall (needed to end simulation gracefully)
+    li a0, 0
+    li a7, 93
+    ecall
+\end{lstlisting}
+
+\subsection*{Equivalent C Code}
+
+\begin{lstlisting}[language=C, caption={Fibonacci sequence generator in C}]
+/* Fibonacci sequence generator in C
+ * Generates the first 21 Fibonacci numbers using iterative approach
+ */
+int main() {
+    int i;
+    int a = 0;
+    int b = 1;
+    int next;
+    int count = 21;
+
+    for (i = 1; i < count; i++) {
+        next = a + b;
+        a = b;
+        b = next;
+    }
+    return 0;
+}
+\end{lstlisting}
+
+\newpage
+\section*{Exercise 2}
+
+Using the same flow described before, write and run an assembly program called \texttt{program\_3.s} for the RISC-V architecture.
+
+The program must:
+
+\begin{enumerate}
+    \item Given two arrays of 10 8-bit integer numbers (\texttt{v1}, \texttt{v2}), check if any element of \texttt{v1} is included in \texttt{v2} at least once. Save the matching values in a third vector (\texttt{v3}).
+
+    \begin{lstlisting}[language={[x86masm]Assembler}]
+v1: .byte 2, 6, -3, 11, 9, 18, -13, 16, 5, 1
+v2: .byte 4, 2, -13, 3, 9, 9, 7, 16, 4, 7
+# Expected output
+v3: .byte 2, 9, -13, 16
+    \end{lstlisting}
+
+    \item Set three flags (\texttt{flag1}, \texttt{flag2}, \texttt{flag3}) to indicate the following conditions:
+    \begin{itemize}
+        \item \textbf{Flag 1}: The third vector (\texttt{v3}) is empty.  
+        $\Rightarrow$ \texttt{flag1 = 1} if empty, \texttt{0} otherwise.
+        \item \textbf{Flag 2}: \texttt{v3} is not empty and elements are strictly increasing (\texttt{v3[i+1] > v3[i]}).  
+        $\Rightarrow$ \texttt{flag2 = 1} if true, \texttt{0} otherwise.
+        \item \textbf{Flag 3}: \texttt{v3} is not empty and elements are strictly decreasing (\texttt{v3[i+1] < v3[i]}).  
+        $\Rightarrow$ \texttt{flag3 = 1} if true, \texttt{0} otherwise.
+    \end{itemize}
+\end{enumerate}
+
+\subsection*{Explanation of Initial Stalls}
+
+At the beginning of the program, there are a few sequential stalls because the cache memory is empty when execution starts. The \texttt{\_start} section is used to load data into the cache so that it will be available during the execution of the program.
+
+\subsection*{Program Performance}
+
+\begin{table}[h!]
+\centering
+\caption{Program performance for the specific processor configurations}
+\begin{tabularx}{\textwidth}{|X|X|X|X|X|}
+\hline
+\textbf{Program} & \textbf{Clock cycles} & \textbf{Number of Instructions} & \textbf{CPI} & \textbf{IPC} \\
+\hline
+program\_1 & 23  & 13  & 1.76923 & 0.56521 \\
+program\_2 & 156 & 126 & 1.2381  & 0.8076  \\
+program\_3 & 844 & 627 & 1.34609 & 0.7428  \\
+\hline
+\end{tabularx}
+\end{table}
+
+\newpage
+\section*{Exercise 3}
+
+Perform execution and CPI measurements of some benchmark programs. The folder contains two additional programs:
+
+\begin{itemize}
+    \item \texttt{calculate\_pi.s}
+    \item \texttt{insertion\_sort.s}
+\end{itemize}
+
+Also, include programs from previous exercises:
+\begin{itemize}
+    \item \texttt{program\_1.s}
+    \item \texttt{program\_2.s}
+    \item \texttt{program\_3.s}
+\end{itemize}
+
+Assume:
+\begin{itemize}
+    \item Equal initial weights (20\% each program)
+    \item Processor frequency: \textbf{1.75 kHz}
+\end{itemize}
+
+Then consider the following scenarios:
+
+\begin{description}
+    \item[Scenario 1:] 
+    \begin{itemize}
+        \item program\_1.s: 1\%
+        \item program\_2.s: 50\%
+        \item program\_3.s: 13\%
+        \item calculate\_pi.s: 25\%
+        \item insertion\_sort.s: 11\%
+    \end{itemize}
+
+    \item[Scenario 2:] 
+    \begin{itemize}
+        \item program\_1.s: 10\%
+        \item program\_2.s: 5\%
+        \item program\_3.s: 50\%
+        \item calculate\_pi.s: 10\%
+        \item insertion\_sort.s: 25\%
+    \end{itemize}
+
+    \item[Scenario 3:] 
+    \begin{itemize}
+        \item program\_1.s: 20\%
+        \item program\_2.s: 30\%
+        \item program\_3.s: 1.9\%
+        \item calculate\_pi.s: 31.4\%
+        \item insertion\_sort.s: 16.7\%
+    \end{itemize}
+\end{description}
+
+\subsection*{Processor Performance Results}
+
+\begin{table}[h!]
+\centering
+\caption{Processor performance for different weighted programs}
+\begin{tabularx}{\textwidth}{|X|X|X|X|X|}
+\hline
+\textbf{Program} & \textbf{Initial scenario} & \textbf{Scenario 1} & \textbf{Scenario 2} & \textbf{Scenario 3} \\
+\hline
+calculate\_pi.s   & 0.46068 & 0.57586 & 0.23034 & 0.72328 \\
+insertion\_sort.s  & 1.54388 & 0.85197 & 1.93629 & 1.29344 \\
+program\_1.s       & 0.00263 & 0.00013 & 0.00131 & 0.00263 \\
+program\_2.s       & 0.01778 & 0.04457 & 0.00446 & 0.02674 \\
+program\_3.s       & 0.09646 & 0.06270 & 0.24114 & 0.00916 \\
+\textbf{TOTAL Time (@ 1.75kHz)} & \textbf{2.12143} & \textbf{1.53523} & \textbf{2.41354} & \textbf{2.05525} \\
+\hline
+\end{tabularx}
+\end{table}
+
+\end{document}
+
