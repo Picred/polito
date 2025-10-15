@@ -1,0 +1,13 @@
+LAB_INF:
+- config: cp /opt/gem5-22.1-ASE/gem5_example/gem5_config.py .
+- compile: /opt/gem5-22.1-ASE/gem5_example/riscv_compile program1.s
+- gem5: /opt/gem5-22.1-ASE/gem5_example/gem5_run gem5_config.py program1 program1.log
+- visual: /opt/gem5-22.1-ASE/Gem5_Pipeline_Visualizer-x86_64.AppImage
+
+2 in 1 : /opt/gem5-22.1-ASE/gem5_example/riscv_compile program1.s && /opt/gem5-22.1-ASE/gem5_example/gem5_run gem5_config.py program1 program1.log
+
+
+VM: 
+- compile: riscv_compile program1.s
+- config: 
+- gem5: gem5_run gem5_config.py program1 program1.log
