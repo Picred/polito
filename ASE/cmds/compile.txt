@@ -11,3 +11,5 @@ VM:
 - compile: riscv_compile program1.s
 - config: 
 - gem5: gem5_run gem5_config.py program1 program1.log
+
+2 in 1 : riscv_compile program1.s && gem5_run gem5_config.py program1 program1.log
