@@ -1,1 +1,4 @@
-
+ASE/*/common
+ASE/*/m5out
+ASE/*/*.log
+ASE/*/*.docx
