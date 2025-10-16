@@ -1,0 +1,17 @@
+10094:  auipc x1, 1             FsssDEMW               
+10098:  addi x1, x1, 64             FDEMW              
+1009c:  flw f9, 0(x1)                FDEMs W           
+100a0:  auipc x1, 1                   FDEs MW          
+100a4:  addi x1, x1, 68                FDssEMW         
+100a8:  flw f9, 0(x1)                   FssDEMW        
+100ac:  auipc x1, 1                        FDEMW       
+100b0:  addi x1, x1, 72                     FDEMW      
+100b4:  lw x2, 0(x1)                         FDEMW     
+100b8:  auipc x1, 1                           FDEMW    
+100bc:  addi x1, x1, 76                        FDEMW   
+100c0:  lw x2, 0(x1)                            FDEMW  
+100c4:  addi x1, x0, 0                           FDEMW 
+100c8:  addi x10, x0, 0                           FDEMW
+100cc:  addi x17, x0, 93                           FDEM
+100d0:  ecall                                       FDE
+100d4:  c_addi4spn x8, x2, 0                         FD
