@@ -1,4 +1,21 @@
 # program_1.s
+# Program that implements a C fragment of program:
+# int m = 1;
+# float a, b;
+# for (i = 31; i >= 0; i--) {
+##     if (i is a multiple of 3) {
+#         a = v1[i] / ((float) m << i); /*logic shift */
+#         m = (int) a;
+#     } else { 
+#         a = v1[i] * ((float) m * i);
+#         m = (int) a;
+#     }   
+#     v4[i] = a * v1[i] - v2[i];
+#     v5[i] = v4[i]/v3[i] - b;
+#     v6[i] = (v4[i]-v1[i]) * v5[i];
+# }
+
+
 .section .data
 v1: .float 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 1.10, 1.11, 1.12, 1.13, 1.14, 1.15, 1.16, 1.17, 1.18, 1.19, 1.20, 1.21, 1.22, 1.23, 1.24, 1.25, 1.26, 1.27, 1.28, 1.29, 1.30, 1.31, 1.32
 v2: .float 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 2.10, 2.11, 2.12, 2.13, 2.14, 2.15, 2.16, 2.17, 2.18, 2.19, 2.20, 2.21, 2.22, 2.23, 2.24, 2.25, 2.26, 2.27, 2.28, 2.29, 2.30, 2.31, 2.32
@@ -64,10 +81,12 @@ main:
     li x11, 31 # dimensione vettori
     li x12, 3 # valore da confrontare per operazione modulo
     
+
     # offset per farli partire dalla fine
     addi x1, x1, 124
     addi x2, x2, 124
     addi x3, x3, 124
+
     addi x4, x4, 124
     addi x5, x5, 124
     addi x6, x6, 124
@@ -75,7 +94,9 @@ main:
 
 loop:
     flw f21, 0(x1) # elemento di v1 = x1[]
+
     rem x13, x11, x12 # x13 = i % 3
+    
     bnez x13, else
 
 
