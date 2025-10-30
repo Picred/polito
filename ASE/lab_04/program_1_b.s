@@ -56,197 +56,198 @@ main:
     li x11, 15
 
 loop_sum:
-    flw f1, 0(x1) # elemento di i
-    flw f2, 0(x2) # elemento di w
+    flw f1, 0(x1) 
+    flw f2, 0(x2) 
     addi x11, x11, -1
 
-    fmul.s f10, f1, f2 # i * w
+    fmul.s f10, f1, f2 
 
-    addi x1, x1, 4 # avanzo indice i
-    addi x2, x2, 4 # avanzo indice w
+    addi x1, x1, 4 
+    addi x2, x2, 4 
 
     fadd.s f4, f4, f10
 
     # ----------------
-    flw f1, 0(x1) # elemento di i
-    flw f2, 0(x2) # elemento di w
+    flw f1, 0(x1) 
+    flw f2, 0(x2) 
     addi x11, x11, -1
 
-    fmul.s f10, f1, f2 # i * w
+    fmul.s f10, f1, f2 
 
-    addi x1, x1, 4 # avanzo indice i
-    addi x2, x2, 4 # avanzo indice w
+    addi x1, x1, 4 
+    addi x2, x2, 4 
 
     fadd.s f4, f4, f10
     # ---------------------
 
-    flw f1, 0(x1) # elemento di i
-    flw f2, 0(x2) # elemento di w
+    flw f1, 0(x1) 
+    flw f2, 0(x2) 
     addi x11, x11, -1
 
-    fmul.s f10, f1, f2 # i * w
+    fmul.s f10, f1, f2 
 
-    addi x1, x1, 4 # avanzo indice i
-    addi x2, x2, 4 # avanzo indice w
+    addi x1, x1, 4 
+    addi x2, x2, 4 
 
     fadd.s f4, f4, f10
 
     # ----------------
-    flw f1, 0(x1) # elemento di i
-    flw f2, 0(x2) # elemento di w
+    flw f1, 0(x1) 
+    flw f2, 0(x2) 
     addi x11, x11, -1
 
-    fmul.s f10, f1, f2 # i * w
+    fmul.s f10, f1, f2 
 
-    addi x1, x1, 4 # avanzo indice i
-    addi x2, x2, 4 # avanzo indice w
+    addi x1, x1, 4 
+    addi x2, x2, 4 
 
     fadd.s f4, f4, f10
     # ---------------------
 
-    flw f1, 0(x1) # elemento di i
-    flw f2, 0(x2) # elemento di w
+    flw f1, 0(x1) 
+    flw f2, 0(x2) 
     addi x11, x11, -1
 
-    fmul.s f10, f1, f2 # i * w
+    fmul.s f10, f1, f2 
 
-    addi x1, x1, 4 # avanzo indice i
-    addi x2, x2, 4 # avanzo indice w
+    addi x1, x1, 4 
+    addi x2, x2, 4 
 
     fadd.s f4, f4, f10
 
     # ----------------
-    flw f1, 0(x1) # elemento di i
-    flw f2, 0(x2) # elemento di w
+    flw f1, 0(x1) 
+    flw f2, 0(x2) 
     addi x11, x11, -1
 
-    fmul.s f10, f1, f2 # i * w
+    fmul.s f10, f1, f2 
 
-    addi x1, x1, 4 # avanzo indice i
-    addi x2, x2, 4 # avanzo indice w
+    addi x1, x1, 4 
+    addi x2, x2, 4 
 
     fadd.s f4, f4, f10
     # ---------------------
 
-    flw f1, 0(x1) # elemento di i
-    flw f2, 0(x2) # elemento di w
+    flw f1, 0(x1) 
+    flw f2, 0(x2) 
     addi x11, x11, -1
 
-    fmul.s f10, f1, f2 # i * w
+    fmul.s f10, f1, f2 
 
-    addi x1, x1, 4 # avanzo indice i
-    addi x2, x2, 4 # avanzo indice w
+    addi x1, x1, 4 
+    addi x2, x2, 4 
 
     fadd.s f4, f4, f10
 
     # ----------------
-    flw f1, 0(x1) # elemento di i
-    flw f2, 0(x2) # elemento di w
+    flw f1, 0(x1) 
+    flw f2, 0(x2) 
     addi x11, x11, -1
 
-    fmul.s f10, f1, f2 # i * w
+    fmul.s f10, f1, f2 
 
-    addi x1, x1, 4 # avanzo indice i
-    addi x2, x2, 4 # avanzo indice w
+    addi x1, x1, 4 
+    addi x2, x2, 4 
 
     fadd.s f4, f4, f10
     # ---------------------
 
-    flw f1, 0(x1) # elemento di i
-    flw f2, 0(x2) # elemento di w
+    flw f1, 0(x1) 
+    flw f2, 0(x2) 
     addi x11, x11, -1
 
-    fmul.s f10, f1, f2 # i * w
+    fmul.s f10, f1, f2 
 
-    addi x1, x1, 4 # avanzo indice i
-    addi x2, x2, 4 # avanzo indice w
+    addi x1, x1, 4 
+    addi x2, x2, 4 
 
     fadd.s f4, f4, f10
 
     # ----------------
-    flw f1, 0(x1) # elemento di i
-    flw f2, 0(x2) # elemento di w
+    flw f1, 0(x1) 
+    flw f2, 0(x2) 
     addi x11, x11, -1
 
-    fmul.s f10, f1, f2 # i * w
+    fmul.s f10, f1, f2 
 
-    addi x1, x1, 4 # avanzo indice i
-    addi x2, x2, 4 # avanzo indice w
+    addi x1, x1, 4 
+    addi x2, x2, 4 
 
     fadd.s f4, f4, f10
     # ---------------------
 
-    flw f1, 0(x1) # elemento di i
-    flw f2, 0(x2) # elemento di w
+    flw f1, 0(x1) 
+    flw f2, 0(x2) 
     addi x11, x11, -1
 
-    fmul.s f10, f1, f2 # i * w
+    fmul.s f10, f1, f2 
 
-    addi x1, x1, 4 # avanzo indice i
-    addi x2, x2, 4 # avanzo indice w
+    addi x1, x1, 4 
+    addi x2, x2, 4 
 
     fadd.s f4, f4, f10
 
     # ----------------
-    flw f1, 0(x1) # elemento di i
-    flw f2, 0(x2) # elemento di w
+    flw f1, 0(x1) 
+    flw f2, 0(x2) 
     addi x11, x11, -1
 
-    fmul.s f10, f1, f2 # i * w
+    fmul.s f10, f1, f2 
 
-    addi x1, x1, 4 # avanzo indice i
-    addi x2, x2, 4 # avanzo indice w
+    addi x1, x1, 4 
+    addi x2, x2, 4 
 
     fadd.s f4, f4, f10
     # ---------------------
 
-    flw f1, 0(x1) # elemento di i
-    flw f2, 0(x2) # elemento di w
+    flw f1, 0(x1) 
+    flw f2, 0(x2) 
     addi x11, x11, -1
 
-    fmul.s f10, f1, f2 # i * w
+    fmul.s f10, f1, f2 
 
-    addi x1, x1, 4 # avanzo indice i
-    addi x2, x2, 4 # avanzo indice w
+    addi x1, x1, 4 
+    addi x2, x2, 4 
 
     fadd.s f4, f4, f10
 
     # ----------------
-    flw f1, 0(x1) # elemento di i
-    flw f2, 0(x2) # elemento di w
+    flw f1, 0(x1) 
+    flw f2, 0(x2) 
     addi x11, x11, -1
 
-    fmul.s f10, f1, f2 # i * w
+    fmul.s f10, f1, f2 
 
-    addi x1, x1, 4 # avanzo indice i
-    addi x2, x2, 4 # avanzo indice w
+    addi x1, x1, 4 
+    addi x2, x2, 4 
 
     fadd.s f4, f4, f10
     # ---------------------
 
-    flw f1, 0(x1) # elemento di i
-    flw f2, 0(x2) # elemento di w
+    flw f1, 0(x1) 
+    flw f2, 0(x2) 
     addi x11, x11, -1
 
-    fmul.s f10, f1, f2 # i * w
+    fmul.s f10, f1, f2 
 
-    addi x1, x1, 4 # avanzo indice i
-    addi x2, x2, 4 # avanzo indice w
+    addi x1, x1, 4 
+    addi x2, x2, 4 
 
     fadd.s f4, f4, f10
 
     # ----------------
-    flw f1, 0(x1) # elemento di i
-    flw f2, 0(x2) # elemento di w
+    flw f1, 0(x1) 
+    flw f2, 0(x2) 
     addi x11, x11, -1
 
-    fmul.s f10, f1, f2 # i * w
+    fmul.s f10, f1, f2 
 
-    addi x1, x1, 4 # avanzo indice i
-    addi x2, x2, 4 # avanzo indice w
+    addi x1, x1, 4 
+    addi x2, x2, 4 
 
     fadd.s f4, f4, f10
     # ---------------------
+
     bgez x11, loop_sum
 
 
