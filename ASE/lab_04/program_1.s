@@ -2,6 +2,7 @@
 # compute the output (y) of a neural computation which multiplies two arrays each other
 # to prevent the propagation of NaN (Not a Number), the activation function f is defined as
 # y = f(x) = 0 if the exponent part of x is equal to 0xFF, x otherwise
+
 .section .data
 i: .float 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6
 w: .float 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6
@@ -18,6 +19,7 @@ subsum: .float 0.0
 # Code section
 .section .text
 .globl _start
+
 
 _start:
     la x1, i
@@ -52,6 +54,7 @@ main:
 
     li x11, 15 # K = dimensione vettori
 
+
 loop_sum:
     flw f1, 0(x1) # elemento di i
     flw f2, 0(x2) # elemento di w
@@ -63,12 +66,13 @@ loop_sum:
     addi x2, x2, 4 # avanzo indice w
 
     addi x11, x11, -1 # K--
-    
+
     bgez x11, loop_sum
 
 
 add_bias:
     fadd.s f4, f4, f3 # f4+= b
+
 
 compute_y:
     fmv.x.w x12, f4 # sposto i bit fp dell'accumulatore f4 in un intero per fare shift
