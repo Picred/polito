@@ -80,7 +80,6 @@ loop_sum:
     fadd.s f4, f4, f10
     # ---------------------
 
-
     flw f1, 0(x1) 
     flw f2, 0(x2) 
     addi x11, x11, -1
@@ -103,170 +102,17 @@ loop_sum:
     addi x2, x2, 4 
 
     fadd.s f4, f4, f10
-    # ---------------------
-
-
-    flw f1, 0(x1) 
-    flw f2, 0(x2) 
-    addi x11, x11, -1
-
-    fmul.s f10, f1, f2 
-
-    addi x1, x1, 4 
-    addi x2, x2, 4 
-
-    fadd.s f4, f4, f10
-
-    # ----------------
-    flw f1, 0(x1) 
-    flw f2, 0(x2) 
-    addi x11, x11, -1
-
-    fmul.s f10, f1, f2 
-
-    addi x1, x1, 4 
-    addi x2, x2, 4 
-
-    fadd.s f4, f4, f10
-    # ---------------------
-
-
-    flw f1, 0(x1) 
-    flw f2, 0(x2) 
-    addi x11, x11, -1
-
-    fmul.s f10, f1, f2 
-
-    addi x1, x1, 4 
-    addi x2, x2, 4 
-
-    fadd.s f4, f4, f10
-
-    # ----------------
-    flw f1, 0(x1) 
-    flw f2, 0(x2) 
-    addi x11, x11, -1
-
-    fmul.s f10, f1, f2 
-
-    addi x1, x1, 4 
-    addi x2, x2, 4 
-
-    fadd.s f4, f4, f10
-    # ---------------------
-
-
-    flw f1, 0(x1) 
-    flw f2, 0(x2) 
-    addi x11, x11, -1
-
-    fmul.s f10, f1, f2 
-
-    addi x1, x1, 4 
-    addi x2, x2, 4 
-
-    fadd.s f4, f4, f10
-
-    # ----------------
-    flw f1, 0(x1) 
-    flw f2, 0(x2) 
-    addi x11, x11, -1
-
-    fmul.s f10, f1, f2 
-
-    addi x1, x1, 4 
-    addi x2, x2, 4 
-
-    fadd.s f4, f4, f10
-    # ---------------------
-
-
-    flw f1, 0(x1) 
-    flw f2, 0(x2) 
-    addi x11, x11, -1
-
-    fmul.s f10, f1, f2 
-
-    addi x1, x1, 4 
-    addi x2, x2, 4 
-
-    fadd.s f4, f4, f10
-
-    # ----------------
-    flw f1, 0(x1) 
-    flw f2, 0(x2) 
-    addi x11, x11, -1
-
-    fmul.s f10, f1, f2 
-
-    addi x1, x1, 4 
-    addi x2, x2, 4 
-
-    fadd.s f4, f4, f10
-    # ---------------------
-
-
-    flw f1, 0(x1) 
-    flw f2, 0(x2) 
-    addi x11, x11, -1
-
-    fmul.s f10, f1, f2 
-
-    addi x1, x1, 4 
-    addi x2, x2, 4 
-
-    fadd.s f4, f4, f10
-
-    # ----------------
-    flw f1, 0(x1) 
-    flw f2, 0(x2) 
-    addi x11, x11, -1
-
-    fmul.s f10, f1, f2 
-
-    addi x1, x1, 4 
-    addi x2, x2, 4 
-
-    fadd.s f4, f4, f10
-    # ---------------------
-
-
-    flw f1, 0(x1) 
-    flw f2, 0(x2) 
-    addi x11, x11, -1
-
-    fmul.s f10, f1, f2 
-
-    addi x1, x1, 4 
-    addi x2, x2, 4 
-
-    fadd.s f4, f4, f10
-
-    # ----------------
-    flw f1, 0(x1) 
-    flw f2, 0(x2) 
-    addi x11, x11, -1
-
-    fmul.s f10, f1, f2 
-
-    addi x1, x1, 4 
-    addi x2, x2, 4 
-
-    fadd.s f4, f4, f10
-    # ---------------------
-    
+    # ---------------------    
     bgez x11, loop_sum
 
 
 add_bias:
     fadd.s f4, f4, f3 # f4+= b
 
-
 compute_y:
     fmv.x.w x12, f4
     slli x12, x12, 1
     srli x12, x12, 24
-
 	bne x12, x8, done_y
 
 set_y_zero:
@@ -275,7 +121,6 @@ set_y_zero:
 
 done_y:
 	fsw f4, 0(x6)
-
 
 end:
     li a0, 0
