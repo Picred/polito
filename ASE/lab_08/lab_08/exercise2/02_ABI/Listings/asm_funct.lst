@@ -1,0 +1,78 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         
+    2 00000000         
+    3 00000000         ;    AREA asm_functions, CODE, READONLY    
+    4 00000000         ;                EXPORT  ASM_funct
+    5 00000000         ;ASM_funct
+    6 00000000         ;    ; save current SP for a faster access 
+    7 00000000         ;    ; to parameters in the stack
+    8 00000000         ;    MOV   r12, sp
+    9 00000000         ;    ; save volatile registers
+   10 00000000         ;    STMFD sp!,{r4-r8,r10-r11,lr}    
+   11 00000000         ;    ; extract argument 4 and 5 into R4 and R5
+   12 00000000         ;    LDR   r4, [r12]
+   13 00000000         ;    LDR   r5, [r12,#4]
+   14 00000000         ;
+   15 00000000         ;    ; your code
+   16 00000000         ;    
+   17 00000000         ;    ; setup a value for R0 to return
+   18 00000000         ;    MOV   r0, r5
+   19 00000000         ;    
+   20 00000000         ;    ; restore volatile registers
+   21 00000000         ;    LDMFD sp!,{r4-r8,r10-r11,pc}
+   22 00000000         ;    
+   23 00000000         ;                END
+   24 00000000         
+   25 00000000         
+   26 00000000                 AREA             my_function_ex3, CODE, READONLY
+   27 00000000                 EXPORT           fast_magic_calc
+   28 00000000         fast_magic_calc
+   29 00000000 B500            PUSH             {LR}
+   30 00000002         ; R0 contains the input_float_as_int (x)
+   31 00000002         
+   32 00000002         ; 1. Load the magic constant 0x5f3759df into R1
+   33 00000002 4903            LDR              R1, =0x5f3759df
+   34 00000004 EA4F 0050       LSR              R0, R0, #1
+   35 00000008         
+   36 00000008 1A08            SUBS             R0, R1, R0  ; R0 = R1 - R0 (Mag
+                                                            ic - (x >> 1))
+   37 0000000A         
+   38 0000000A BD00            POP              {PC}
+   39 0000000C 4770            BX               LR
+   40 0000000E         
+   41 0000000E                 END
+              00 00 5F3759DF 
+Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M3 --depe
+nd=.\objects\asm_funct.d -o.\objects\asm_funct.o -I.\Source -IC:\Users\andry\Ap
+pData\Local\Arm\Packs\Keil\LPC1700_DFP\2.7.2\Device\Include --predefine="__EVAL
+ SETA 1" --predefine="__UVISION_VERSION SETA 543" --predefine="LPC175x_6x SETA 
+1" --list=.\listings\asm_funct.lst Source\ASM_funct.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+fast_magic_calc 00000000
+
+Symbol: fast_magic_calc
+   Definitions
+      At line 28 in file Source\ASM_funct.s
+   Uses
+      At line 27 in file Source\ASM_funct.s
+Comment: fast_magic_calc used once
+my_function_ex3 00000000
+
+Symbol: my_function_ex3
+   Definitions
+      At line 26 in file Source\ASM_funct.s
+   Uses
+      None
+Comment: my_function_ex3 unused
+2 symbols
+337 symbols in table
