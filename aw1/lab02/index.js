@@ -114,8 +114,14 @@ const filmLibrary = new FilmLibrary();
 // const film1 = new Film(6, "title1", true, "2026-03-15", 2, 1);
 
 
-filmLibrary.deleteAllWatchDates().then((message) => {
+filmLibrary.getFilms().then((message) => {
     console.log(message);
 }).catch((reason) => {
     console.log(reason);
 });
+
+// filmLibrary.deleteAllWatchDates().then((message) => {
+//     console.log(message);
+// }).catch((reason) => {
+//     console.log(reason);
+// });
