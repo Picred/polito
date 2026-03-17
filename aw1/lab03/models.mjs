@@ -5,7 +5,7 @@ export function Film(id, title, favorite=false, watch_date=undefined, rating=und
     this.id = id;
     this.title = title;
     this.favorite = favorite
-    this.watch_date = dayjs(watch_date);
+    this.watch_date = (watch_date ? dayjs(watch_date).format("YYYY-MM-DD") : null);
     this.rating = rating;
     this.user_id = user_id;
 
