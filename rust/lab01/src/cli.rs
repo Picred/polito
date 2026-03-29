@@ -3,11 +3,15 @@ use std::env;
 
 pub fn read_cli() -> (String, i32){
     let args: Vec<String> = env::args().collect();
-
-    let file = &args[1];
+    let len: usize = args.len();
+    let mut file = "".to_string();
     let mut n: i32 = 10;
-    
-    if args.len() == 4{
+
+    if len >= 2{
+        file = args[1].clone();
+    }
+
+    if len == 4{
         let head = &args[2];
         if *head == "--head".to_string() {
             match &args[3].parse(){

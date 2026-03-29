@@ -1,1 +1,0 @@
-/home/picred/Scrivania/polito/rust/lab01/target/debug/lab01: /home/picred/Scrivania/polito/rust/lab01/src/cli.rs /home/picred/Scrivania/polito/rust/lab01/src/io.rs /home/picred/Scrivania/polito/rust/lab01/src/main.rs
