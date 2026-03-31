@@ -28,7 +28,7 @@ const FilmLibraryLogo = () => {
 const SearchForm = () => {
   return (
     <Form>
-        <Row className='px-3'>
+        <Row className='me-1'>
           <Col xs="auto">
             <Form.Control
               type="text"
@@ -45,6 +45,8 @@ const SearchForm = () => {
 
 const UserLogo = () => {
   return (
-    <i className="bi bi-person-circle text-white fs-3"/>
+    <button className='btn'>
+      <i className="bi bi-person-circle text-white fs-3"/>
+    </button>
   );
 };

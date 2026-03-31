@@ -1,14 +1,14 @@
-import { Container, Row, Col, ButtonGroup, ToggleButton } from 'react-bootstrap';
+import { Col, ButtonGroup, ToggleButton } from "react-bootstrap";
 
 export const Sidebar = (props) => {
     return (
-        <Col xs={3} className='bg-light vh-100'>
-            <h3 className='mt-2'>Filters</h3>
-                <ButtonGroup className="w-100 flex-column">
+        <Col xs={2} className="bg-light vh-100">
+            <h3 className="mt-2">Filters</h3>
+                <ButtonGroup vertical className="w-100">
                     {props.filters.map((filter, idx) => (
                         <ToggleButton
                             key={idx}
-                            className='my-1'
+                            className="my-1"
                             id={`filter-${filter.name}`}
                             type="radio"
                             variant="outline-primary"
