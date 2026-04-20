@@ -176,6 +176,7 @@ La funzione deve restituire:
 
 **Nota**: Usare `checked_mul` per rilevare l’overflow in modo sicuro.
 
+
 ### 3.2 Esercizio principale
 Il programma gestisce la costruzione di uno schema di battaglia navale 20×20 salvato su file. La costruzione avviene per passi: alla prima invocazione si crea una board vuota; ad ogni invocazione successiva si aggiunge una nave nella posizione indicata e si salva lo schema aggiornato.
 
