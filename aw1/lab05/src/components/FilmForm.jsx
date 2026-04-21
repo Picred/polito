@@ -3,7 +3,7 @@ import { Alert, Form, Button} from "react-bootstrap";
 import dayjs from "dayjs";
 
 export const FilmForm = (props) => {
-    const handleAddNewFilm = async (prevState, formData) => {
+    const handleSubmit = async (prevState, formData) => {
         const film = Object.fromEntries(formData.entries());
 
         if (film.title.trim() === ""){
@@ -12,19 +12,21 @@ export const FilmForm = (props) => {
             return film;
         }
 
-        props.handleAddNewFilm(film);
-
+        if(props.handleAddNewFilm)
+            props.handleAddNewFilm(film);
+        else
+            props.updateFilm({id: props.film.id, ...film});
         return initialState;
     }
     
     const initialState = {
-        "title": "", 
-        "favorite": false,
-        "watch_date": dayjs(), 
-        "rating": 0
+        "title": props.film?.title, 
+        "favorite": props.film?.favorite,
+        "watch_date": props.film?.date ?? dayjs(), 
+        "rating": props.film?.rating
     };
 
-    const [formState, formAction] = useActionState(handleAddNewFilm, initialState);
+    const [formState, formAction] = useActionState(handleSubmit, initialState);
 
     return (
     <>
@@ -42,16 +44,16 @@ export const FilmForm = (props) => {
 
         <Form.Group className="mb-3" controlId="formBasicWatchDate">
             <Form.Label>Watch Date</Form.Label>
-            <Form.Control name="watch_date" type="date" defaultValue={formState.watch_date.format("YYYY-MM-DD")}/>
+            <Form.Control name="watch_date" type="date" max={dayjs().format("YYYY-MM-DD")} defaultValue={formState.watch_date.format("YYYY-MM-DD")}/>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicRating">
             <Form.Label>Rating</Form.Label>
             <Form.Control name="rating" type="number" defaultValue={formState.rating} min={0} max={5}/>
         </Form.Group>
-        <Button variant="primary" type="submit">
-            Submit
-        </Button>
+        
+        {props.handleAddNewFilm && <Button variant="primary" type="submit">Submit</Button>}
+        {props.film && <Button variant="success" type="submit">Edit</Button>}
         
     </Form>
     </>

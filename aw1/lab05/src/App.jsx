@@ -16,7 +16,9 @@ import { FilmForm } from "./components/FilmForm"
 export const App = () => {
     const [activeFilter, setActiveFilter] = useState("All");
     const [filmFormDisplayMode, setFilmFormDisplayMode] = useState("hidden");
+    const [editableFilm, setEditableFilm] = useState();
 
+    
     const [filmList, setFilmList] = useState([
         new Film(1, "Pulp Fiction", true, "2024-03-10", 5),
         new Film(2, "21 Grams", true, "2024-03-17", 4),
@@ -24,7 +26,7 @@ export const App = () => {
         new Film(4, "Matrix", false),
         new Film(5, "Shrek", false, "2024-03-21", 3)
     ]);
-
+    
     const filters = [
         { name: "All"},
         { name: "Favorite"},
@@ -32,6 +34,26 @@ export const App = () => {
         { name: "Seen last month"},
         { name: "Unseen"},
     ];
+
+
+    
+
+    const handleEditFilm = (film) => {
+        setEditableFilm(film);
+        setFilmFormDisplayMode("editFilm");
+    }
+
+    const updateFilm = newFilm => {
+        setFilmList(oldFilmList => {
+            return oldFilmList.map(film => {
+                if(film.id === newFilm.id)
+                    return new Film(film.id, newFilm.title, newFilm.favorite, newFilm.watch_date, newFilm.rating)
+                else return film;
+            });
+        });
+        setFilmFormDisplayMode("hidden");
+
+    }
 
     const updateFilter = (newFilter) => {
         setActiveFilter(newFilter);
@@ -44,10 +66,7 @@ export const App = () => {
         film.user_id = 3;
         setFilmList([...filmList, film]);
     }
-
-    const handleEditFilm = (film) => {
-        console.log(film);
-    }
+    
 
     const handleFilmFormDisplayMode = mode => {
         setFilmFormDisplayMode(mode);
@@ -69,8 +88,10 @@ export const App = () => {
             {activeFilter === "Best rated" && <FilmTable handleEditFilm={handleEditFilm} activeFilter={activeFilter} filmList={filmList.filter(film => film.rating == 5)}/>}
             {activeFilter === "Unseen" && <FilmTable handleEditFilm={handleEditFilm} activeFilter={activeFilter} filmList={filmList.filter(film => !film.watch_date)}/>}
             {activeFilter === "Seen last month" && <FilmTable handleEditFilm={handleEditFilm} activeFilter={activeFilter} filmList={getFilmLastMonth(filmList)}/>}
-        
+
+
             {filmFormDisplayMode==="addFilm" && <FilmForm handleAddNewFilm={handleAddNewFilm}/>}
+            {filmFormDisplayMode==="editFilm" && <FilmForm key={editableFilm.id} film={editableFilm} updateFilm={updateFilm}/>}
         </Col>
         </Row>
 

@@ -6,8 +6,8 @@ export const FilmTable = (props) => {
         <h3 className="mt-2">{props.activeFilter}</h3>
         <Table bordered hover responsive="sm">
             <tbody>
-                {props.filmList.map((film, idx) => (
-                    <tr key={idx} className="align-middle">
+                {props.filmList.map((film) => (
+                    <tr key={film.id} className="align-middle">
                         <td>
                             <HearthIcon isFavorite={film.favorite}/>
                             {film.title}
