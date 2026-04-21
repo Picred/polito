@@ -1,33 +1,33 @@
-import { Table, Col } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 
 export const FilmTable = (props) => {
     return (
-        <Col xs={10}>
-            <h3 className="mt-2">{props.activeFilter}</h3>
-            <Table bordered hover responsive="sm">
-                <tbody>
-                    {props.filmList.map((film, idx) => (
-                        <tr key={idx} className="align-middle">
-                            <td>
-                                <HearthIcon isFavorite={film.favorite}/>
-                                {film.title}
-                                
-                            </td>
+    <>
+        <h3 className="mt-2">{props.activeFilter}</h3>
+        <Table bordered hover responsive="sm">
+            <tbody>
+                {props.filmList.map((film, idx) => (
+                    <tr key={idx} className="align-middle">
+                        <td>
+                            <HearthIcon isFavorite={film.favorite}/>
+                            {film.title}
+                            
+                        </td>
 
-                            <td className="text-center">
-                                {film.watch_date}
-                            </td>
+                        <td className="text-center">
+                            {film.watch_date}
+                        </td>
 
-                            <td className="text-end text-nowrap">
-                                <RatingStars filmId={film.id} rating={film.rating} maxStars={5} />
-                                <EditButton/>
-                                <DeleteButton/>
-                            </td>
-                        </tr>
-                    ))}
-            </tbody>
-            </Table>
-        </Col>
+                        <td className="text-end text-nowrap">
+                            <RatingStars filmId={film.id} rating={film.rating} maxStars={5} />
+                            <EditButton handleEditFilm={() => {props.handleEditFilm(film)}}/>
+                            <DeleteButton/>
+                        </td>
+                    </tr>
+                ))}
+        </tbody>
+        </Table>
+    </>
     );
 };
 
@@ -62,9 +62,9 @@ const RatingStars = (props) => {
 };
 
 
-const EditButton = () => {
+const EditButton = (props) => {
     return (
-        <button className="btn">
+        <button className="btn" onClick={props.handleEditFilm}>
             <i className="bi bi-pencil"></i>
         </button>
     );
