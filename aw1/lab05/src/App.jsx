@@ -15,7 +15,7 @@ import { FilmForm } from "./components/FilmForm"
 
 export const App = () => {
     const [activeFilter, setActiveFilter] = useState("All");
-    const [filmFormActive, setFilmFormActive] = useState(false);
+    const [filmFormDisplayMode, setFilmFormDisplayMode] = useState("hidden");
 
     const [filmList, setFilmList] = useState([
         new Film(1, "Pulp Fiction", true, "2024-03-10", 5),
@@ -38,22 +38,21 @@ export const App = () => {
     }
 
     const handleAddNewFilm = (film) => {
-        setFilmFormActive(false);
+        setFilmFormDisplayMode("hidden");
         //TODO: set userId to the current user before concat.
         film.id = filmList.length + 1;
         film.user_id = 3;
         setFilmList([...filmList, film]);
     }
 
-    const handleFilmFormActiveVisibility = () => {
-        setFilmFormActive(true);
-    }
-
     const handleEditFilm = (film) => {
         console.log(film);
-        
     }
 
+    const handleFilmFormDisplayMode = mode => {
+        setFilmFormDisplayMode(mode);
+    }
+    
     return (
     <div className="vh-100 d-flex flex-column overflow-y-scroll">
         <MyNavbar />
@@ -71,11 +70,11 @@ export const App = () => {
             {activeFilter === "Unseen" && <FilmTable handleEditFilm={handleEditFilm} activeFilter={activeFilter} filmList={filmList.filter(film => !film.watch_date)}/>}
             {activeFilter === "Seen last month" && <FilmTable handleEditFilm={handleEditFilm} activeFilter={activeFilter} filmList={getFilmLastMonth(filmList)}/>}
         
-            {filmFormActive && <FilmForm handleAddNewFilm={handleAddNewFilm}/>}
+            {filmFormDisplayMode==="addFilm" && <FilmForm handleAddNewFilm={handleAddNewFilm}/>}
         </Col>
         </Row>
 
-        {!filmFormActive && <Row><AddButton handleFilmFormActiveVisibility={handleFilmFormActiveVisibility}/></Row>}
+        {filmFormDisplayMode==="hidden" && <Row><AddButton handleFilmFormDisplayMode={handleFilmFormDisplayMode}/></Row>}
         </Container>
     </div>
     );

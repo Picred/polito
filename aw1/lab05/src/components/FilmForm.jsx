@@ -1,35 +1,39 @@
 import { useActionState } from "react";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import { Film } from "../types";
-
+import { Alert, Form, Button} from "react-bootstrap";
+import dayjs from "dayjs";
 
 export const FilmForm = (props) => {
     const handleAddNewFilm = async (prevState, formData) => {
-        props.handleAddNewFilm(new Film(0, formData.get("title"), formData.has("favorite"), formData.get("watch_date"), formData.get("rating")));
+        const film = Object.fromEntries(formData.entries());
 
-        return {
-            title: formData.get("title"),
-            favorite: formData.has("favorite"),
-            watch_date: formData.get("watch_date"),
-            rating: formData.get("rating")
+        if (film.title.trim() === ""){
+            film.error = "Title cannot be empty!";
+            film.watch_date = dayjs(film.watch_date);
+            return film;
         }
+
+        props.handleAddNewFilm(film);
+
+        return initialState;
     }
     
-    const [formState, formAction, isPending] = useActionState(handleAddNewFilm, {
+    const initialState = {
         "title": "", 
         "favorite": false,
-        "watch_date": "Watch Date", 
+        "watch_date": dayjs(), 
         "rating": 0
-    });
+    };
+
+    const [formState, formAction] = useActionState(handleAddNewFilm, initialState);
 
     return (
     <>
-    <h2>Add new Film</h2>
+    {formState.error && <Alert variant="secondary">{formState.error}</Alert>}
+    
     <Form action={formAction}>
         <Form.Group className="mb-3" controlId="formBasicTitle">
             <Form.Label>Title</Form.Label>
-            <Form.Control name="title" type="text" defaultValue={formState.title} required />
+            <Form.Control name="title" type="text" defaultValue={formState.title} required={true} />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicFavorite">
@@ -38,7 +42,7 @@ export const FilmForm = (props) => {
 
         <Form.Group className="mb-3" controlId="formBasicWatchDate">
             <Form.Label>Watch Date</Form.Label>
-            <Form.Control name="watch_date" type="date" defaultValue={formState.watch_date}/>
+            <Form.Control name="watch_date" type="date" defaultValue={formState.watch_date.format("YYYY-MM-DD")}/>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicRating">
