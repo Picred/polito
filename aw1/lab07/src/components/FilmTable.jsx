@@ -5,7 +5,7 @@ import { getFilmLastMonth } from "../utils/utils";
 const filterFunctions = {
   "All": (films) => films,
   "Favorite": (films) => films.filter(film => film.favorite),
-  "Best rated": (films) => films.filter(film => film.rating === 5),
+  "Best rated": (films) => films.filter(film => film.rating == 5),
   "Unseen": (films) => films.filter(film => !film.watch_date),
   "Seen last month": (films) => getFilmLastMonth(films),
 }
@@ -22,7 +22,7 @@ export const FilmTable = (props) => {
   const getFilteredFilms = () => {
     if(params.has("filter")){
       return filterFunctions[params.get("filter")](props.filmList);
-    }
+    } 
     else return props.filmList;
   }
 
@@ -38,7 +38,7 @@ export const FilmTable = (props) => {
           {getFilteredFilms().map((film) => (
             <tr key={film.id} className="align-middle">
               <td>
-                <HearthIcon isFavorite={film.favorite} />
+                <HearthIcon isFavorite={film.favorite} toggleFavorite={props.toggleFavorite} filmId={film.id}/>
                 {film.title}
 
               </td>
@@ -48,7 +48,7 @@ export const FilmTable = (props) => {
               </td>
 
               <td className="text-end text-nowrap">
-                <RatingStars filmId={film.id} rating={film.rating} maxStars={5} />
+                <RatingStars filmId={film.id} rating={film.rating} maxStars={5} updateRating={props.updateRating} />
                 <EditButton handleEditFilm={() => { props.handleEditFilm(film); }} navigate={handleNavigate} filmId={film.id} />
                 <DeleteButton />
               </td>
@@ -64,15 +64,9 @@ export const FilmTable = (props) => {
 
 const HearthIcon = (props) => {
   return (
-    <>
-      {props.isFavorite && <button className="btn">
-        <i className="bi bi-heart-fill text-danger"></i>
-      </button>
-      }
-      {!props.isFavorite && <button className="btn">
-        <i className="bi bi-heart text-dark"></i>
-      </button>}
-    </>
+    <Button className="btn" variant="primary-outline" onClick={() => props.toggleFavorite(props.filmId)}>
+      <i className={`bi ${props.isFavorite ? "bi-heart-fill text-danger" : "bi-heart text-dark"}`}></i>
+    </Button>
   );
 };
 
@@ -83,9 +77,9 @@ const RatingStars = (props) => {
       {[...Array(maxStars)].map((_, index) => {
         const isFull = index < rating;
         return (
-          <button key={index} className="btn text-warning p-0" onClick={(e) => { console.log(`film_id: ${props.filmId} new_rating: ${index + 1}`); }}>
+          <Button key={index} className="btn text-warning p-0" variant="primary-outline"  onClick={() => { props.updateRating(props.filmId, index+1); }}>
             <i className={`bi ${isFull ? "bi-star-fill" : "bi-star"}`} />
-          </button>
+          </Button>
         );
       })}
     </span>
@@ -104,8 +98,8 @@ const EditButton = (props) => {
 
 const DeleteButton = () => {
   return (
-    <button className="btn">
+    <Button className="btn" variant="primary-outline" >
       <i className="bi bi-trash"></i>
-    </button>
+    </Button>
   );
 };

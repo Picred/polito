@@ -6,8 +6,8 @@ import { useNavigate, useParams } from "react-router";
 export const FilmForm = (props) => {
   const navigate = useNavigate();
   const { id } = useParams();
-
-  
+  const filmId = Number(id); // Converti subito in numero
+  const filmToEdit = props.filmList?.find(f => f.id === filmId);
 
   const handleSubmit = async (prevState, formData) => {
     const film = Object.fromEntries(formData.entries());
@@ -21,17 +21,17 @@ export const FilmForm = (props) => {
     if (props.handleAddNewFilm)
       props.handleAddNewFilm(film);
     else
-      props.updateFilm({ id: props.film.id, ...film });
+      props.updateFilm({ id: Number(id), ...film });
 
     navigate("/");
     return initialState;
   }
 
   const initialState = {
-    "title": props.filmList ? props.filmList[id - 1].title : "",
-    "favorite": props.filmList ? props.filmList[id - 1].favorite : false,
-    "watch_date": props.filmList ? dayjs(props.filmList[id - 1].watch_date) : dayjs(),
-    "rating": props.filmList ? props.filmList[id - 1].rating : 0
+    "title": filmToEdit ? filmToEdit.title : "",
+    "favorite": filmToEdit ? filmToEdit.favorite : false,
+    "watch_date": filmToEdit ? dayjs(filmToEdit.watch_date) : dayjs(),
+    "rating": filmToEdit ? filmToEdit.rating : 0
   };
 
   const [formState, formAction] = useActionState(handleSubmit, initialState);

@@ -47,7 +47,25 @@ export const App = () => {
     { name: "Unseen" },
   ];
 
+  const toggleFavorite = filmId => {
+    setFilmList(oldFilmList => {
+      return oldFilmList.map( film => {
+        if (film.id == filmId)
+          return new Film(filmId, film.title, !film.favorite, film.watch_date, film.rating);
+        else return film;
+      });
+    });
+  }
 
+  const updateRating = (filmId, newRating) => {
+    setFilmList(oldFilmList => {
+      return oldFilmList.map( film => {
+        if (film.id == filmId)
+          return new Film(filmId, film.title, film.favorite, film.watch_date, newRating);
+        else return film;
+      });
+    });
+  }
 
 
   const handleEditFilm = (film) => {
@@ -58,8 +76,9 @@ export const App = () => {
   const updateFilm = newFilm => {
     setFilmList(oldFilmList => {
       return oldFilmList.map(film => {
-        if (film.id === newFilm.id)
+        if (film.id === newFilm.id){
           return new Film(film.id, newFilm.title, newFilm.favorite, newFilm.watch_date, newFilm.rating)
+        }
         else return film;
       });
     });
@@ -90,7 +109,7 @@ export const App = () => {
               <Row>
                 <Sidebar filters={filters}/>
                 <Col xs={10}>
-                  <FilmTable handleEditFilm={handleEditFilm} filmList={filmList} />
+                  <FilmTable handleEditFilm={handleEditFilm} filmList={filmList} updateRating={updateRating} toggleFavorite={toggleFavorite}/>
                 </Col>
               </Row>
             </>
@@ -112,7 +131,7 @@ export const App = () => {
 
         </Routes>
           {filmFormDisplayMode === "hidden" && <Row><AddButton handleFilmFormDisplayMode={handleFilmFormDisplayMode} /></Row>}
-
+          
           {/* <Col xs={10}>
 
             {filmFormDisplayMode === "addFilm" && <FilmForm handleAddNewFilm={handleAddNewFilm} />}
