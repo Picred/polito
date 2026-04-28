@@ -11,24 +11,12 @@ import { Container, Row } from "react-bootstrap";
 import { getFilmLastMonth } from "./utils/utils";
 import { AddButton } from "./components/AddButton";
 import { Col } from "react-bootstrap";
-import { FilmForm } from "./components/FilmForm"
+import { FilmForm, WrapperFilmForm } from "./components/FilmForm"
 import { Routes, Route } from "react-router";
-
-
-{/* ROUTES:
-    - / -> all films (index)
-    - /films/new -> add new film
-    - /films/edit/:id -> edit the film with id :id
-    - /films?filter=something -> all films which satisfy the filter
-    - * -> NotFound
-    
-    */ }
-
+import { MyLayout } from "./components/MyLayout";
 
 export const App = () => {
   const [activeFilter, setActiveFilter] = useState("All");
-  const [filmFormDisplayMode, setFilmFormDisplayMode] = useState("hidden");
-  const [editableFilm, setEditableFilm] = useState();
 
 
   const [filmList, setFilmList] = useState([
@@ -47,99 +35,95 @@ export const App = () => {
     { name: "Unseen" },
   ];
 
-  const toggleFavorite = filmId => {
+
+  const updateFilm = newFilm => {
     setFilmList(oldFilmList => {
-      return oldFilmList.map( film => {
+      return oldFilmList.map(film => {
+        if (film.id === newFilm.id)
+          return new Film(film.id, newFilm.title, newFilm.favorite, newFilm.watch_date, newFilm.rating)
+        else return film;
+      });
+    });
+
+  }
+
+  const updateFilter = (newFilter) => {
+    setActiveFilter(newFilter);
+  }
+
+  const handleAddNewFilm = (film) => {
+    //TODO: set userId to the current user before concat.
+    film.id = filmList.length + 1;
+    film.user_id = 3;
+    setFilmList([...filmList, film]);
+  }
+
+  const handleDeleteFilm = (filmId) => {
+    setFilmList((oldFilmList) => {
+      return oldFilmList.filter((film) => film.id !== filmId)
+    });
+  }
+
+  const toggleFavorite = (filmId) => {
+    setFilmList((oldFilmList) => {
+      return oldFilmList.map((film) => {
         if (film.id == filmId)
-          return new Film(filmId, film.title, !film.favorite, film.watch_date, film.rating);
+          return new Film(film.id, film.title, !film.favorite, film.watch_date, film.rating, film.user_id);
         else return film;
       });
     });
   }
 
   const updateRating = (filmId, newRating) => {
-    setFilmList(oldFilmList => {
-      return oldFilmList.map( film => {
+    setFilmList((oldFilmList) => {
+      return oldFilmList.map((film) => {
         if (film.id == filmId)
-          return new Film(filmId, film.title, film.favorite, film.watch_date, newRating);
+          return new Film(film.id, film.title, film.favorite, film.watch_date, newRating, film.user_id);
         else return film;
       });
     });
-  }
-
-
-  const handleEditFilm = (film) => {
-    setEditableFilm(film);
-    setFilmFormDisplayMode("editFilm");
-  }
-
-  const updateFilm = newFilm => {
-    setFilmList(oldFilmList => {
-      return oldFilmList.map(film => {
-        if (film.id === newFilm.id){
-          return new Film(film.id, newFilm.title, newFilm.favorite, newFilm.watch_date, newFilm.rating)
-        }
-        else return film;
-      });
-    });
-    setFilmFormDisplayMode("hidden");
-
-  }
-
-  const handleAddNewFilm = (film) => {
-    setFilmFormDisplayMode("hidden");
-    //TODO: set userId to the current user before concat.
-    film.id = filmList.length + 1;
-    film.user_id = 3; // change it
-    setFilmList([...filmList, film]);
-  }
-
-
-  const handleFilmFormDisplayMode = mode => {
-    setFilmFormDisplayMode(mode);
   }
 
   return (
-    <div className="vh-100 d-flex flex-column overflow-y-scroll">
-      <MyNavbar />
-      <Container fluid>
-        <Routes>
-          <Route path="/" element={ 
-            <>
-              <Row>
-                <Sidebar filters={filters}/>
-                <Col xs={10}>
-                  <FilmTable handleEditFilm={handleEditFilm} filmList={filmList} updateRating={updateRating} toggleFavorite={toggleFavorite}/>
-                </Col>
-              </Row>
-            </>
-          }> 
-            <Route path="films/add" element={
-              <Col xs={10}>
-                <FilmForm handleAddNewFilm={handleAddNewFilm}/>
-              </Col>
-            } />
-            <Route path="films/:id/edit" element={
-              <Col xs={10}>
-                <FilmForm key={editableFilm?.id} filmList={filmList} updateFilm={updateFilm}/>
-              </Col>
-            } />
-          </Route>
-
-
-          <Route path="*" element={<p>Not Found</p>} />
-
-        </Routes>
-          {filmFormDisplayMode === "hidden" && <Row><AddButton handleFilmFormDisplayMode={handleFilmFormDisplayMode} /></Row>}
+    <Routes>
+      <Route element={<MyLayout />} >
+        <Route path="/films" element={<Sidebar filters={filters} updateFilter={updateFilter} />}>
+          <Route index element={<FilmTable filmList={filmList} handleDeleteFilm={handleDeleteFilm} toggleFavorite={toggleFavorite} updateRating={updateRating}/>} />
+          <Route path="new" element={<FilmForm handleAddNewFilm={handleAddNewFilm} />} />
           
-          {/* <Col xs={10}>
+          <Route path=":filmId/edit" element={<WrapperFilmForm filmList={filmList} updateFilm={updateFilm} />} />
+          
+          {/* <Route path="*" element={ <NotFound/> } /> */}
 
-            {filmFormDisplayMode === "addFilm" && <FilmForm handleAddNewFilm={handleAddNewFilm} />}
-            {filmFormDisplayMode === "editFilm" && <FilmForm key={editableFilm.id} film={editableFilm} updateFilm={updateFilm} />}
-          </Col> */}
-          {/* </Row> */}
+        </Route>
 
-      </Container>
-    </div>
+        {/* <Row>
+            <Sidebar
+              filter={activeFilter}
+              filters={filters}
+              updateFilter={updateFilter}
+            />
+
+            <Col xs={10}>
+              {activeFilter === "All" && <FilmTable activeFilter={activeFilter} filmList={filmList} />}
+              {activeFilter === "Favorite" && <FilmTable activeFilter={activeFilter} filmList={filmList.filter(film => film.favorite)} />}
+              {activeFilter === "Best rated" && <FilmTable activeFilter={activeFilter} filmList={filmList.filter(film => film.rating == 5)} />}
+              {activeFilter === "Unseen" && <FilmTable activeFilter={activeFilter} filmList={filmList.filter(film => !film.watch_date)} />}
+              {activeFilter === "Seen last month" && <FilmTable activeFilter={activeFilter} filmList={getFilmLastMonth(filmList)} />}
+
+
+              {filmFormDisplayMode === "addFilm" && <FilmForm handleAddNewFilm={handleAddNewFilm} />}
+              {filmFormDisplayMode === "editFilm" && <FilmForm key={editableFilm.id} film={editableFilm} updateFilm={updateFilm} />}
+            </Col>
+          </Row>
+
+          {filmFormDisplayMode === "hidden" && <Row><AddButton handleFilmFormDisplayMode={handleFilmFormDisplayMode} /></Row>} */}
+
+
+
+
+
+      </Route>
+    </Routes>
   );
 };

@@ -1,13 +1,20 @@
 import { useActionState } from "react";
 import { Alert, Form, Button } from "react-bootstrap";
 import dayjs from "dayjs";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, Link } from "react-router";
+
+export const WrapperFilmForm = (props) => {
+  const { filmId } = useParams();
+
+  const film = props.filmList.filter((film) => film.id == filmId)[0];
+
+  return(
+    <FilmForm film={film} updateFilm={props.updateFilm}/>
+  )
+}
 
 export const FilmForm = (props) => {
   const navigate = useNavigate();
-  const { id } = useParams();
-  const filmId = Number(id); // Converti subito in numero
-  const filmToEdit = props.filmList?.find(f => f.id === filmId);
 
   const handleSubmit = async (prevState, formData) => {
     const film = Object.fromEntries(formData.entries());
@@ -21,17 +28,16 @@ export const FilmForm = (props) => {
     if (props.handleAddNewFilm)
       props.handleAddNewFilm(film);
     else
-      props.updateFilm({ id: Number(id), ...film });
+      props.updateFilm({ id: props.film.id, ...film });
 
-    navigate("/");
-    return initialState;
+    navigate("/films");
   }
 
   const initialState = {
-    "title": filmToEdit ? filmToEdit.title : "",
-    "favorite": filmToEdit ? filmToEdit.favorite : false,
-    "watch_date": filmToEdit ? dayjs(filmToEdit.watch_date) : dayjs(),
-    "rating": filmToEdit ? filmToEdit.rating : 0
+    "title": props.film?.title,
+    "favorite": props.film?.favorite,
+    "watch_date": props.film?.date ?? dayjs(),
+    "rating": props.film?.rating
   };
 
   const [formState, formAction] = useActionState(handleSubmit, initialState);
@@ -40,7 +46,7 @@ export const FilmForm = (props) => {
     <>
       {formState.error && <Alert variant="secondary">{formState.error}</Alert>}
 
-      <Form action={formAction}>
+      <Form id={props.film?.id} action={formAction}>
         <Form.Group className="mb-3" controlId="formBasicTitle">
           <Form.Label>Title</Form.Label>
           <Form.Control name="title" type="text" defaultValue={formState.title} required={true} />
@@ -60,8 +66,9 @@ export const FilmForm = (props) => {
           <Form.Control name="rating" type="number" defaultValue={formState.rating} min={0} max={5} />
         </Form.Group>
 
-        {props.handleAddNewFilm && <Button variant="primary" type="submit">Submit</Button>}
-        {props.filmList && <Button variant="success" type="submit">Edit</Button>}
+        {props.handleAddNewFilm && <Button variant="primary" type="submit">Add</Button>}
+        {props.film && <Button variant="success" type="submit">Edit</Button>}
+        <Link to="/films" className="btn btn-danger m-2" variant="danger">Cancel</Link>
 
       </Form>
     </>

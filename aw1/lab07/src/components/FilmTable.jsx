@@ -1,44 +1,25 @@
-import { Button, Table } from "react-bootstrap";
-import { Outlet, useNavigate, useSearchParams } from "react-router";
-import { getFilmLastMonth } from "../utils/utils";
-
-const filterFunctions = {
-  "All": (films) => films,
-  "Favorite": (films) => films.filter(film => film.favorite),
-  "Best rated": (films) => films.filter(film => film.rating == 5),
-  "Unseen": (films) => films.filter(film => !film.watch_date),
-  "Seen last month": (films) => getFilmLastMonth(films),
-}
+import { Table, Row, Button } from "react-bootstrap";
+import { AddButton } from "./AddButton";
+import { useSearchParams, Link } from "react-router";
+import { getFilmLastMonth, filterFunctions } from "../utils/utils";
 
 
 export const FilmTable = (props) => {
-  const [params, setParams] = useSearchParams();
-  const navigate = useNavigate();
+  const [ searchParam ] = useSearchParams();
+  let filter = searchParam.get("filter");
 
-  const handleNavigate = (path) => {
-    navigate(path);
-  }
+  filter = filter ? filter : "All";
 
-  const getFilteredFilms = () => {
-    if(params.has("filter")){
-      return filterFunctions[params.get("filter")](props.filmList);
-    } 
-    else return props.filmList;
-  }
-
+  const filmList = filterFunctions[filter](props.filmList);
   return (
     <>
-      { params.has("filter") ?
-        <h3 className="mt-2">{params.get("filter")}</h3> 
-        : 
-        <h3 className="mt-2">All</h3>
-      }
+      <h3 className="mt-2">{filter}</h3>
       <Table bordered hover responsive="sm">
         <tbody>
-          {getFilteredFilms().map((film) => (
+          {filmList.map((film) => (
             <tr key={film.id} className="align-middle">
               <td>
-                <HearthIcon isFavorite={film.favorite} toggleFavorite={props.toggleFavorite} filmId={film.id}/>
+                <HearthIcon toggleFavorite={() => props.toggleFavorite(film.id)} isFavorite={film.favorite} />
                 {film.title}
 
               </td>
@@ -48,24 +29,23 @@ export const FilmTable = (props) => {
               </td>
 
               <td className="text-end text-nowrap">
-                <RatingStars filmId={film.id} rating={film.rating} maxStars={5} updateRating={props.updateRating} />
-                <EditButton handleEditFilm={() => { props.handleEditFilm(film); }} navigate={handleNavigate} filmId={film.id} />
-                <DeleteButton />
+                <RatingStars filmId={film.id} rating={film.rating} maxStars={5} updateRating={props.updateRating}/>
+                <EditButton filmId={film.id} />
+                <DeleteButton filmId={film.id} handleDeleteFilm={props.handleDeleteFilm}/>
               </td>
             </tr>
           ))}
         </tbody>
       </Table>
-
-      <Outlet/>
+      <Row><AddButton /></Row>
     </>
   );
 };
 
 const HearthIcon = (props) => {
   return (
-    <Button className="btn" variant="primary-outline" onClick={() => props.toggleFavorite(props.filmId)}>
-      <i className={`bi ${props.isFavorite ? "bi-heart-fill text-danger" : "bi-heart text-dark"}`}></i>
+    <Button variant="link" className="border-0 shadow-none text-decoration-none" onClick={props.toggleFavorite}>
+        <i className={`${props.isFavorite ? "bi bi-heart-fill text-danger" : "bi bi-heart text-dark"}`}></i>
     </Button>
   );
 };
@@ -77,7 +57,7 @@ const RatingStars = (props) => {
       {[...Array(maxStars)].map((_, index) => {
         const isFull = index < rating;
         return (
-          <Button key={index} className="btn text-warning p-0" variant="primary-outline"  onClick={() => { props.updateRating(props.filmId, index+1); }}>
+          <Button key={index} variant="link" className="btn text-warning p-0 text-decoration-none border-0" onClick={() => props.updateRating(props.filmId, index + 1)}>
             <i className={`bi ${isFull ? "bi-star-fill" : "bi-star"}`} />
           </Button>
         );
@@ -89,16 +69,16 @@ const RatingStars = (props) => {
 
 const EditButton = (props) => {
   return (
-    <Button className="btn" variant="primary-outline" onClick={() => props.navigate("/films/" + props.filmId + "/edit")}>
+    <Link to={`${props.filmId}/edit`} className="btn">
       <i className="bi bi-pencil"></i>
-    </Button>
+    </Link>
   );
 };
 
 
-const DeleteButton = () => {
+const DeleteButton = (props) => {
   return (
-    <Button className="btn" variant="primary-outline" >
+    <Button className="btn-sm shadow-sm" variant="outline-danger" onClick={() => props.handleDeleteFilm(props.filmId)}>
       <i className="bi bi-trash"></i>
     </Button>
   );
