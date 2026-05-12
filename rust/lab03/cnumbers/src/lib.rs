@@ -1,31 +1,27 @@
-// pub fn add(left: u64, right: u64) -> u64 {
-//     left + right
-// }
-
-
 pub mod solution{
-    use std::fmt::Display;
-    use std::fmt::Formatter;
-    use std::fmt::Error;
-    use std::ops::Add;
-    use std::ops::AddAssign;
-    
-    #[derive(Clone, Copy, Default)]
+    use std::fmt::{Display, Formatter, Error};
+    use std::ops::{Add, AddAssign};
+    use std::convert::{From, TryFrom, AsRef, AsMut};
+    use std::cmp::{PartialEq, Ord, PartialOrd, Ordering, Eq};
+
+    #[derive(Debug, Clone, Copy, Default)]
     pub struct ComplexNumber{
-        real: f32,
-        imag: f32,
+        real: f64,
+        imag: f64,
     }
 
 
-    pub struct ComplexNumberError{
+    #[derive(Debug, PartialEq)]
+    pub enum ComplexNumberError{
+        ImaginaryNotZero
     }
 
     impl ComplexNumber{
-        pub fn new(r: f32, i: f32) -> Self { Self{real: r, imag: i} }
-        pub fn real(&self) -> f32 { self.real }
-        pub fn imag(&self) -> f32 { self.imag }
-        pub fn from_real(r: f32) -> Self { Self{real: r, imag: 0.0} }
-        pub fn to_tuple(&self) -> (f32, f32) { (self.real, self.imag) }
+        pub fn new(r: f64, i: f64) -> Self { Self{ real: r, imag: i} }
+        pub fn real(&self) -> f64 { self.real }
+        pub fn imag(&self) -> f64 { self.imag }
+        pub fn from_real(r: f64) -> Self { Self{ real: r, imag: 0.0 } }
+        pub fn to_tuple(&self) -> (f64, f64) { ( self.real, self.imag ) }
     }
 
     impl Display for ComplexNumber{
@@ -42,9 +38,9 @@ pub mod solution{
         }
     }
 
-    impl Add<f32> for ComplexNumber{
+    impl Add<f64> for ComplexNumber{
         type Output = Self;
-        fn add(self, other: f32) -> Self::Output{
+        fn add(self, other: f64) -> Self::Output{
             Self {real: self.real + other, imag: self.imag }
         }
     }
@@ -71,33 +67,71 @@ pub mod solution{
         }
     }
 
-    
+    // // commented out again when implementing TryInto because it's covered by TryInto see note below
+    // impl From<ComplexNumber> for f64{
+    //     fn from(from: ComplexNumber) -> Self{
+    //         if from.imag == 0.0{
+    //             from.real as f64
+    //         }
+    //         else{
+    //             panic!("imag is not 0. Cannot convert");
+    //         }
+    //     }
+    // }
 
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+    impl TryFrom<ComplexNumber> for f64{
+        type Error = ComplexNumberError;
+        fn try_from(value: ComplexNumber) -> Result<Self, Self::Error> {
+            if value.imag == 0.0{
+                Ok( value.real )
+            } else{
+                Err(ComplexNumberError::ImaginaryNotZero)
+            }
+        }
     }
+
+    impl From<f64> for ComplexNumber{
+        fn from(value: f64) -> Self {
+            ComplexNumber { real: value, imag: 0.0 }
+        }
+    }
+
+    impl PartialEq<Self> for ComplexNumber{
+        fn eq(&self, other: &Self) -> bool {
+            self.real == other.real && self.imag == other.imag
+        }
+    }
+
+    impl Ord for ComplexNumber{
+        fn cmp(&self, other: &Self) -> Ordering{
+            if self.real > other.real && self.imag > other.imag{
+                Ordering::Greater
+            } else if self.real < other.real && self.imag < other.imag{
+                Ordering::Less
+            } else{
+                Ordering::Equal
+            }
+        }
+    }
+
+    impl PartialOrd<Self> for ComplexNumber{
+        fn partial_cmp(&self, other: &Self) -> Option<Ordering>{
+            Some(self.cmp(other))
+        }
+    }
+
+    impl Eq for ComplexNumber {}
+
+    impl AsRef<f64> for ComplexNumber{
+        fn as_ref(&self) -> &f64{
+            &self.real
+        }
+    }
+
+    impl AsMut<f64> for ComplexNumber{
+        fn as_mut(&mut self) -> &mut f64{
+            &mut self.real
+        }
+    }
+
 }
