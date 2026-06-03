@@ -1,0 +1,61 @@
+// Get all films
+GET http://localhost:8080/api/films/
+
+
+
+
+// Get unseen films
+# GET http://localhost:8080/api/films/unseen
+
+
+// Get film by id 
+# GET http://localhost:8080/api/films/3
+
+
+// Create a new film with all its properties
+# POST http://localhost:8080/api/films
+# Content-Type: application/json
+
+# {
+#   "title": "Shrek 3",
+#   "favorite": 1,
+#   "watch_date": "2026-03-09",
+#   "rating": 3,
+#   "user_id": 1
+# }
+
+
+// Update an existing film:
+# PUT http://localhost:8080/api/films/14
+# Content-Type: application/json
+
+# {
+#   "title": "Shrek 4",
+#   "favorite": 0,
+#   "watch_date": "2026-03-09",
+#   "rating": 1,
+#   "user_id": 1
+# }
+
+
+// Update rating of an existing film
+# PATCH http://localhost:8080/api/films/13
+# Content-Type: application/json
+
+# {
+#   "rating": 5
+# }
+
+
+// Update favorite of an existing film
+
+PATCH http://localhost:8080/api/films/13/favorite
+Content-Type: application/json
+
+{
+  "favorite": 1
+}
+
+
+// Delete a film given its id.
+DELETE http://localhost:8080/api/films/11
